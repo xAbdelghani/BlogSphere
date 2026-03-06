@@ -1,0 +1,47 @@
+<div class="app-layout">
+  <header class="glass-header">
+    <div class="header-container">
+      <div class="brand" routerLink="/">
+        <mat-icon color="primary">auto_stories</mat-icon>
+        <span class="logo-text">BlogSpace</span>
+      </div>
+
+      <!-- Navigation for Non-Logged-in Users -->
+      <div class="nav-links" *ngIf="!isUserLoggedIn">
+        <button mat-button routerLink="/login" routerLinkActive="active-link">Login</button>
+        <button mat-raised-button color="primary" routerLink="/signup">Get Started</button>
+      </div>
+
+      <!-- Navigation for Logged-in Users -->
+      <div class="nav-links" *ngIf="isUserLoggedIn">
+        <button mat-button routerLink="/user/view-all" routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{exact: true}">Explore</button>
+        <button mat-button routerLink="/user/create-post" routerLinkActive="active-link">Write</button>
+
+        <button mat-button [matMenuTriggerFor]="searchMenu">Search <mat-icon>arrow_drop_down</mat-icon></button>
+        <mat-menu #searchMenu="matMenu">
+          <button mat-menu-item routerLink="/user/search-by-name">
+            <mat-icon>search</mat-icon>
+            <span>By Name</span>
+          </button>
+          <button mat-menu-item routerLink="/user/search-by-category">
+            <mat-icon>category</mat-icon>
+            <span>By Category</span>
+          </button>
+          <button mat-menu-item routerLink="/user/search-by-tags">
+            <mat-icon>label</mat-icon>
+            <span>By Tags</span>
+          </button>
+        </mat-menu>
+
+        <button mat-button routerLink="/user/view-my-posts" routerLinkActive="active-link">My Posts</button>
+        <div class="divider"></div>
+        <button mat-stroked-button color="warn" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main-content animate-fade-in">
+    <router-outlet></router-outlet>
+  </main>
+</div>

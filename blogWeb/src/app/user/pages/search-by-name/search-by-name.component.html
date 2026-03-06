@@ -1,0 +1,62 @@
+<div class="page-header animate-fade-in">
+    <h1>Search Posts</h1>
+    <p>Find articles by their title or keyword.</p>
+</div>
+
+<div class="search-form-container animate-fade-in">
+    <mat-form-field appearance="outline" class="search-input w-100">
+        <mat-label>Enter Keyword to search</mat-label>
+        <input matInput [(ngModel)]="name" (keyup.enter)="searchByName()" placeholder="e.g., Angular, Spring Boot">
+        <button mat-icon-button matSuffix color="primary" (click)="searchByName()" [disabled]="!name.trim()">
+            <mat-icon>search</mat-icon>
+        </button>
+    </mat-form-field>
+</div>
+
+<!-- Loading State -->
+<div class="loading-state" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Searching...</p>
+</div>
+
+<!-- Empty State -->
+<div class="empty-state animate-fade-in" *ngIf="hasSearched && !isLoading && result.length === 0">
+    <mat-icon>search_off</mat-icon>
+    <h3>No Results Found</h3>
+    <p>We couldn't find any posts matching "{{ name }}". Try different keywords.</p>
+</div>
+
+<!-- Results Grid -->
+<div class="posts-grid" *ngIf="!isLoading && result.length > 0">
+    <mat-card class="post-card animate-fade-in" *ngFor="let item of result">
+        <div class="post-image-container">
+            <img [src]="item.img || 'assets/placeholder.jpg'" class="post-img" alt="Post Image" />
+        </div>
+
+        <mat-card-header>
+            <div mat-card-avatar class="user-avatar"></div>
+            <mat-card-title class="post-title">{{ item.name }}</mat-card-title>
+            <mat-card-subtitle class="post-meta">
+                <span>By {{ item.username }}</span>
+                <span class="dot-separator">•</span>
+                <span>{{ item.date | date:'mediumDate' }}</span>
+            </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="post-content">
+            <p>{{ item.content?.length > 150 ? item.content.substr(0, 150) + '...' : item.content }}</p>
+        </mat-card-content>
+
+        <mat-card-actions class="post-actions">
+            <div class="stats">
+                <span class="stat-item">
+                    <mat-icon>favorite_border</mat-icon> {{item.likeCount}}
+                </span>
+                <span class="stat-item">
+                    <mat-icon>visibility</mat-icon> {{item.viewCount}}
+                </span>
+            </div>
+            <button mat-raised-button color="primary" routerLink="/user/view-post/{{item.id}}">Read More</button>
+        </mat-card-actions>
+    </mat-card>
+</div>

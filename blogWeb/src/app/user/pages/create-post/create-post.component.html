@@ -1,0 +1,82 @@
+<div class="page-header animate-fade-in">
+    <h1>Create New Post</h1>
+    <p>Share your knowledge and ideas with the community</p>
+</div>
+
+<div class="form-container animate-fade-in">
+    <mat-card class="create-post-card">
+        <mat-card-content>
+            <form [formGroup]="postForm" class="post-form">
+
+                <div class="form-row">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Post Title</mat-label>
+                        <input matInput formControlName="name" placeholder="Enter an engaging title..." required>
+                        <mat-error *ngIf="postForm.get('name')?.invalid && postForm.get('name')?.touched">
+                            Title is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row split-row">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Category</mat-label>
+                        <mat-select formControlName="categoryId" required>
+                            <mat-option *ngFor="let category of listOfCategories" [value]="category.id">
+                                {{category.name}}
+                            </mat-option>
+                        </mat-select>
+                        <mat-error *ngIf="postForm.get('categoryId')?.invalid && postForm.get('categoryId')?.touched">
+                            Please select a category
+                        </mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Cover Image URL</mat-label>
+                        <input matInput formControlName="img" placeholder="https://example.com/image.jpg" required>
+                        <mat-icon matSuffix class="text-muted">image</mat-icon>
+                        <mat-error *ngIf="postForm.get('img')?.invalid && postForm.get('img')?.touched">
+                            Cover image is required
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                    <label class="editor-label">Content</label>
+                    <div class="easymde-wrapper">
+                        <textarea id="easymde-editor"></textarea>
+                    </div>
+                    <div class="editor-error"
+                        *ngIf="postForm.get('content')?.invalid && postForm.get('content')?.touched">
+                        Content is required
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Tags</mat-label>
+                        <mat-chip-grid #chipGrid aria-label="Enter tags">
+                            <mat-chip-row *ngFor="let tag of tags; let i = index" (removed)="remove(tag)">
+                                {{tag}}
+                                <button matChipRemove [attr.aria-label]="'remove ' + tag">
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip-row>
+                            <input placeholder="Add a tag..." [matChipInputFor]="chipGrid"
+                                (matChipInputTokenEnd)="add($event)" />
+                        </mat-chip-grid>
+                        <mat-hint>Press enter to add multiple tags</mat-hint>
+                    </mat-form-field>
+                </div>
+
+                <div class="form-actions">
+                    <button mat-button type="button" routerLink="/user/view-all">Cancel</button>
+                    <button mat-raised-button color="primary" class="submit-btn"
+                        [disabled]="postForm.invalid || isSubmitting" (click)="createPost()">
+                        {{ isSubmitting ? 'Publishing...' : 'Publish Post' }}
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

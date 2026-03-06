@@ -1,0 +1,52 @@
+<div class="page-header animate-fade-in">
+    <h1>My Posts</h1>
+    <p>Manage and view your published articles.</p>
+</div>
+
+<div class="empty-state animate-fade-in" *ngIf="allPosts.length === 0">
+    <mat-icon>article</mat-icon>
+    <h3>You haven't posted anything yet</h3>
+    <p>Start sharing your knowledge today!</p>
+    <button mat-raised-button color="primary" routerLink="/user/create-post">Create First Post</button>
+</div>
+
+<div class="posts-grid" *ngIf="allPosts.length > 0">
+    <mat-card class="post-card animate-fade-in" *ngFor="let item of allPosts">
+        <div class="post-image-container">
+            <img [src]="item.img || 'assets/placeholder.jpg'" class="post-img" alt="Post Image" />
+        </div>
+
+        <mat-card-header>
+            <div mat-card-avatar class="user-avatar"></div>
+            <mat-card-title class="post-title">{{ item.name }}</mat-card-title>
+            <mat-card-subtitle class="post-meta">
+                <span>By {{ item.username }}</span>
+                <span class="dot-separator">•</span>
+                <span>{{ item.date | date:'mediumDate' }}</span>
+            </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="post-content">
+            <p>{{ item.content?.length > 150 ? item.content.substr(0, 150) + '...' : item.content }}</p>
+        </mat-card-content>
+
+        <mat-card-actions class="post-actions">
+            <div class="stats">
+                <span class="stat-item">
+                    <mat-icon>favorite_border</mat-icon> {{item.likeCount}}
+                </span>
+                <span class="stat-item">
+                    <mat-icon>visibility</mat-icon> {{item.viewCount}}
+                </span>
+            </div>
+            <div>
+                <button mat-icon-button color="primary" routerLink="/user/view-post/{{item.id}}" matTooltip="Read">
+                    <mat-icon>visibility</mat-icon>
+                </button>
+                <button mat-icon-button color="warn" (click)="deletePost(item.id)" matTooltip="Delete Post">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </mat-card-actions>
+    </mat-card>
+</div>

@@ -1,0 +1,53 @@
+<div class="page-header animate-fade-in">
+    <h1>Explore Posts</h1>
+    <p>Discover the latest articles from the community.</p>
+</div>
+
+<!-- Loading State (UX) -->
+<div class="loading-state" *ngIf="isLoading">
+    <mat-spinner diameter="40"></mat-spinner>
+    <p>Loading posts...</p>
+</div>
+
+<!-- Empty State (UX) -->
+<div class="empty-state animate-fade-in" *ngIf="!isLoading && allPosts.length === 0">
+    <mat-icon>article</mat-icon>
+    <h3>No Posts Found</h3>
+    <p>There are currently no blog posts available. Check back later!</p>
+    <button mat-raised-button color="primary" routerLink="/user/create-post">Create First Post</button>
+</div>
+
+<!-- Success State (UI + UX) -->
+<div class="posts-grid" *ngIf="!isLoading && allPosts.length > 0">
+    <mat-card class="post-card animate-fade-in" *ngFor="let item of allPosts">
+        <div class="post-image-container">
+            <img [src]="item.img || 'assets/placeholder.jpg'" class="post-img" alt="Post Image" />
+        </div>
+
+        <mat-card-header>
+            <div mat-card-avatar class="user-avatar"></div>
+            <mat-card-title class="post-title">{{ item.name }}</mat-card-title>
+            <mat-card-subtitle class="post-meta">
+                <span>By {{ item.username }}</span>
+                <span class="dot-separator">•</span>
+                <span>{{ item.date | date:'mediumDate' }}</span>
+            </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content class="post-content">
+            <p>{{ item.content?.length > 150 ? item.content.substr(0, 150) + '...' : item.content }}</p>
+        </mat-card-content>
+
+        <mat-card-actions class="post-actions">
+            <div class="stats">
+                <span class="stat-item">
+                    <mat-icon>favorite_border</mat-icon> {{item.likeCount}}
+                </span>
+                <span class="stat-item">
+                    <mat-icon>visibility</mat-icon> {{item.viewCount}}
+                </span>
+            </div>
+            <button mat-raised-button color="primary" routerLink="/user/view-post/{{item.id}}">Read More</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
